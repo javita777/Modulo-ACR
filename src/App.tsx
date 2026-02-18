@@ -7,7 +7,7 @@ import { Footer } from "./components/Footer";
 
 import { GeneralAntecedents } from "./components/GeneralAntecedents";
 import { ProblemDefinition } from "./components/ProblemDefinition";
-// import { PossibleCauses } from "./components/PossibleCauses";
+import { PossibleCauses } from "./components/PossibleCauses";
 // import { Whys } from "./components/Whys";
 // import { CausalTree } from "./components/CausalTree";
 // import { ActionPlans } from "./components/ActionPlans";
@@ -31,22 +31,22 @@ export const App = () => {
     };
 
     const renderContent = () => {
-         switch (currentStep) {
-             case 1:
+        switch (currentStep) {
+            case 1:
                 return <GeneralAntecedents />;
-             case 2:
-                 return <ProblemDefinition />;
-    //         case 3:
-    //             return <PossibleCauses />;
-    //         case 4:
-    //             return <Whys />;
-    //         case 5:
-    //             return <CausalTree />;
-    //         case 6:
-    //             return <ActionPlans />;
-    //         case 7:
-    //             return <StandardizationImprovements />;
-         }
+            case 2:
+                return <ProblemDefinition />;
+            case 3:
+                return <PossibleCauses />;
+            //          case 4:
+            //              return <Whys />;
+            //          case 5:
+            //              return <CausalTree />;
+            //          case 6:
+            //              return <ActionPlans />;
+            //          case 7:
+            //              return <StandardizationImprovements />;
+        }
     };
 
     return (

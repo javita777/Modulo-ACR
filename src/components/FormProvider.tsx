@@ -12,22 +12,7 @@ import {
 } from "./FormContext"
 
 // Constantes exportadas para defaultValues del step 1
-export const PRACTICAS: string[] = ['CI', 'GA', 'DE', '5S', 'SO', 'ME', 'MA', 'MP', 'PC', 'LTD']
-export const MODOS_DE_FALLA: string[] = [
-    'Falla Métodos o Errores de Operación y Mantenimiento',
-    'Falla alimentación eléctrica',
-    'Falla en sensores o transductores',
-    'Falla de refrigeración o sobrecalentamiento',
-    'Falla en dispositivos de seguridad',
-    'Falla de comunicación',
-    'Falla en actuadores, transmisiones o motores',
-    'Falla de procesamiento o control (software)',
-    'Falla en el cableado o conexiones',
-    'Falla en las interfaces de usuario',
-    'Falla en sistemas hidráulicos o neumáticos',
-    'Falla en los sistemas de protección',
-    'Modos de Falla en Control de Calidad',
-]
+import { PRACTICAS, MODOS_DE_FALLA } from "./GeneralAntecedents"
 
 export const FormProvider = ({ children }: { children: React.ReactNode }) => {
     // Un useForm por cada step
@@ -36,8 +21,8 @@ export const FormProvider = ({ children }: { children: React.ReactNode }) => {
             plantaTDR: "", area: "", linea: "", equipoCC: "", codigo: "",
             nroDesvio: "", nroST: "", nroOmOb: "", nroCasosSO: "",
             fecha: undefined,
-            practica: [PRACTICAS[0]],
-            modoDeFalla: [MODOS_DE_FALLA[0]],
+            practica: [],
+            modoDeFalla: [],
             evidencias: [],
             accionesInmediatas: ["", "", "", "", ""],
         },
@@ -56,8 +41,8 @@ export const FormProvider = ({ children }: { children: React.ReactNode }) => {
     })
 
     const form3 = useForm<PossibleCausesValues>({
-        defaultValues: { causas: [] },
-        })
+        defaultValues: { causas: [{ descripcion: '', clasificacion: '', verificado: false }] },
+    })
 
     const form4 = useForm<WhysValues>({
         defaultValues: { why1: "", why2: "", why3: "", why4: "", why5: "" },
@@ -91,7 +76,13 @@ export const FormProvider = ({ children }: { children: React.ReactNode }) => {
     }
 
     const submitAllSteps = () => {
-        stepSubmitMap.current.forEach(fn => fn())
+        console.log("[Step 1] Form data:", form1.getValues())
+        console.log("[Step 2] Form data:", form2.getValues())
+        console.log("[Step 3] Form data:", form3.getValues())
+        console.log("[Step 4] Form data:", form4.getValues())
+        console.log("[Step 5] Form data:", form5.getValues())
+        console.log("[Step 6] Form data:", form6.getValues())
+        console.log("[Step 7] Form data:", form7.getValues())
     }
 
     return (

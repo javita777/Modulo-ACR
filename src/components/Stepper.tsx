@@ -1,5 +1,6 @@
 import '../index.css'
 
+import { Fragment } from 'react'
 import { ChevronRight, Check } from 'lucide-react'
 
 const steps = [
@@ -27,7 +28,7 @@ export const Stepper = ({ currentStep, onStepClick }: StepperProps) => {
                 const isPending = step.id > currentStep;
 
                 return (
-                    <>
+                    <Fragment key={step.id}>
                         {/* Paso */}
                         <div
                             className="flex gap-2 items-center cursor-pointer group"
@@ -71,7 +72,7 @@ export const Stepper = ({ currentStep, onStepClick }: StepperProps) => {
                                 <ChevronRight />
                             </div>
                         )}
-                    </>
+                    </Fragment>
                 );
             })}
 

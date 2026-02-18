@@ -10,9 +10,25 @@ import { FormDatePicker } from "./ui/form/FormDatePicker"
 import { FormInput } from "./ui/form/FormInput"
 import { FormSelect } from "./ui/form/FormSelect"
 import { useStepForm, useFormActions, type GeneralAntecedentsValues } from "./FormContext"
-import { PRACTICAS, MODOS_DE_FALLA } from "./FormProvider"
 
 type ImagePreview = { src: string; name: string }
+
+export const PRACTICAS: string[] = ['CI', 'GA', 'DE', '5S', 'SO', 'ME', 'MA', 'MP', 'PC', 'LTD']
+export const MODOS_DE_FALLA: string[] = [
+    'Falla Métodos o Errores de Operación y Mantenimiento',
+    'Falla alimentación eléctrica',
+    'Falla en sensores o transductores',
+    'Falla de refrigeración o sobrecalentamiento',
+    'Falla en dispositivos de seguridad',
+    'Falla de comunicación',
+    'Falla en actuadores, transmisiones o motores',
+    'Falla de procesamiento o control (software)',
+    'Falla en el cableado o conexiones',
+    'Falla en las interfaces de usuario',
+    'Falla en sistemas hidráulicos o neumáticos',
+    'Falla en los sistemas de protección',
+    'Modos de Falla en Control de Calidad',
+]
 
 export const GeneralAntecedents = () => {
     const form = useStepForm(1)
@@ -139,7 +155,7 @@ export const GeneralAntecedents = () => {
                 <Controller name="practica" control={control} rules={{ required: "Seleccione al menos una práctica" }}
                     render={({ field }) => (
                         <FormCombobox title="Práctica" items={PRACTICAS}
-                            defaultValue={field.value} onChange={field.onChange} error={errors.practica?.message} />
+                            defaultValue={[PRACTICAS[0]]} onChange={field.onChange} error={errors.practica?.message} />
                     )} />
 
                 {/* Modo de falla — solo visible cuando práctica incluye 'MP' */}
@@ -147,7 +163,7 @@ export const GeneralAntecedents = () => {
                     <Controller name="modoDeFalla" control={control} rules={{ required: "Seleccione al menos un modo de falla" }}
                         render={({ field }) => (
                             <FormCombobox title="Modo de falla" items={MODOS_DE_FALLA}
-                                defaultValue={field.value} onChange={field.onChange} error={errors.modoDeFalla?.message} />
+                                defaultValue={[MODOS_DE_FALLA[0]]} onChange={field.onChange} error={errors.modoDeFalla?.message} />
                         )} />
                 )}
             </div>
