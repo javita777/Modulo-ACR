@@ -42,12 +42,26 @@ export type PossibleCausesValues = {
     }[]
 }
 
+export type WhyNodeKind = 'cv' | 'why' | 'root'
+
+export type WhyNode = {
+    id: string
+    kind: WhyNodeKind
+    col: number
+    row: number
+    text: string
+    isRootCause: boolean
+    parentId: string | null
+}
+
+export type WhySection = {
+    id: string
+    causaValidada: string   // nombre de la causa validada (origen)
+    nodes: WhyNode[]
+}
+
 export type WhysValues = {
-    why1: string
-    why2: string
-    why3: string
-    why4: string
-    why5: string
+    sections: WhySection[]
 }
 
 export type CausalTreeValues = {

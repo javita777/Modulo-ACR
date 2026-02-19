@@ -45,7 +45,7 @@ export const FormProvider = ({ children }: { children: React.ReactNode }) => {
     })
 
     const form4 = useForm<WhysValues>({
-        defaultValues: { why1: "", why2: "", why3: "", why4: "", why5: "" },
+        defaultValues: { sections: [] },
     })
 
     const form5 = useForm<CausalTreeValues>({
