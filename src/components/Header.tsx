@@ -3,7 +3,7 @@ import { Progress } from "@/components/ui/progress"
 
 import logo from '../assets/Logo-transparente.png'
 import '../index.css'
-import { useFormActions, useStepForm, GA_PROGRESS_FIELDS, PD_PROGRESS_FIELDS } from './FormContext';
+import { useFormActions, useStepForm, GA_PROGRESS_FIELDS, PD_PROGRESS_FIELDS, PC_PROGRESS_FIELDS, WHYS_PROGRESS_FIELDS, CT_PROGRESS_FIELDS } from './FormContext';
 
 export const Header = () => {
     const { submitAllSteps } = useFormActions()
@@ -33,16 +33,40 @@ export const Header = () => {
 
     // ── Step 3: Posibles Causas ────────────────────────────────────────────────
     const form3 = useStepForm(3)
-    const causas = form3.watch("causas") ?? []
-    const progressStep3 = causas.length === 0
+    const [causasVal] = form3.watch(PC_PROGRESS_FIELDS)
+    const progressStep3 = causasVal.length === 0
         ? 0
         : Math.round(
-            (causas.filter(c => c.descripcion?.trim() !== '' && c.clasificacion !== '').length
-                / causas.length) * 100
+            (causasVal.filter(c => c.descripcion?.trim() !== '' && c.clasificacion !== '').length
+                / causasVal.length) * 100
         )
 
+    // ── Step 4: 5 por qué ─────────────────────────────────────────────────────
+    const form4 = useStepForm(4)
+    const [sectionsVal] = form4.watch(WHYS_PROGRESS_FIELDS)
+    const progressStep4 = sectionsVal.length === 0
+        ? 0
+        : Math.round(
+            sectionsVal.reduce((acc, s) => {
+                const whyNodes = s.nodes.filter(n => n.kind === 'why')
+                if (whyNodes.length === 0) return acc
+                return acc + whyNodes.filter(n => n.text.trim() !== '').length / whyNodes.length
+            }, 0) / sectionsVal.length * 100
+        )
+
+    // ── Step 5: Árbol causal ───────────────────────────────────────────────────
+    const form5 = useStepForm(5)
+    const hechosVal = form5.watch("hechos")
+    const diagramaVal = form5.watch("diagrama")
+    const progressStep5 = Math.round(
+        ([
+            hechosVal.some(h => h.trim() !== ''),
+            diagramaVal !== null,
+        ].filter(Boolean).length / CT_PROGRESS_FIELDS.length) * 100
+    )
+
     // ── Progreso total (promedio de todos los steps) ──────────────────────────
-    const progress = Math.round((progressStep1 + progressStep2 + progressStep3) / 3)
+    const progress = Math.round((progressStep1 + progressStep2 + progressStep3 + progressStep4 + progressStep5) / 5)
 
     const [logoContainerHeight, setLogoContainerHeight] = useState<number | undefined>(undefined);
     const titleContainerRef = useRef<HTMLDivElement>(null);

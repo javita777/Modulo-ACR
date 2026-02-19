@@ -64,9 +64,11 @@ export type WhysValues = {
     sections: WhySection[]
 }
 
+export type DiagramFile = { src: string; name: string; type: string }
+
 export type CausalTreeValues = {
-    causaRaiz: string
-    notas: string
+    hechos: string[]
+    diagrama: DiagramFile | null
 }
 
 export type ActionPlansValues = {
@@ -118,7 +120,7 @@ export const useFormActions = () => {
 }
 
 // ─────────────────────────────────────────────────────────────────────────────
-// Campos que cuentan para el progreso del step 1
+// Campos que cuentan para el progreso 
 // ─────────────────────────────────────────────────────────────────────────────
 
 export const GA_PROGRESS_FIELDS: (keyof GeneralAntecedentsValues)[] = [
@@ -130,6 +132,18 @@ export const GA_PROGRESS_FIELDS: (keyof GeneralAntecedentsValues)[] = [
 export const PD_PROGRESS_FIELDS: (keyof ProblemDefinitionValues)[] = [
     "queProblema", "dondeOcurrio", "aQuienOcurrio", "cuandoOcurrio",
     "cualTendencia", "cuanGrande", "descripcion",
+]
+
+export const PC_PROGRESS_FIELDS: (keyof PossibleCausesValues)[] = [
+    "causas",
+]
+
+export const WHYS_PROGRESS_FIELDS: (keyof WhysValues)[] = [
+    "sections",
+]
+
+export const CT_PROGRESS_FIELDS: (keyof CausalTreeValues)[] = [
+    "hechos", "diagrama",
 ]
 
 export { FormContext }

@@ -210,7 +210,7 @@ export const GeneralAntecedents = () => {
                     <div className="flex flex-col gap-3 px-1.5">
                         {([0, 1, 2, 3, 4] as const).map((index) => (
                             <div key={index} className="flex items-center gap-2.5">
-                                <span className="flex items-center justify-center min-w-8 h-8 rounded-md bg-[var(--color-primary)] text-white text-body-small font-medium select-none">
+                                <span className="flex items-center justify-center min-w-8 h-8 rounded-md bg-[var(--color-primary-100)] text-white text-body-small font-medium select-none">
                                     {index + 1}
                                 </span>
                                 <Input type="text" placeholder="Value" className="flex-1"

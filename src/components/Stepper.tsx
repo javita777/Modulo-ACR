@@ -41,14 +41,14 @@ export const Stepper = ({ currentStep, onStepClick }: StepperProps) => {
                                     'rounded-full h-7 w-7 flex items-center justify-center',
                                     'border-2',
                                     isActive
-                                        ? 'bg-[var(--color-primary)] text-white border-[var(--color-primary)]'
+                                        ? 'bg-[var(--color-primary-100)] text-white border-[var(--color-primary-100)]'
                                         : isPending
                                             ? 'bg-[#E1E1E6] text-[#8D8D99] border-[#8d8d99]'
-                                            : 'bg-white text-[#8D8D99] border-[var(--color-primary)]',
+                                            : 'bg-white text-[#8D8D99] border-[var(--color-primary-100)]',
                                 ].join(' ')}
                             >
                                 {isCompleted
-                                    ? <Check color="var(--color-primary)" />
+                                    ? <Check color="var(--color-primary-100)" />
                                     : step.id
                                 }
                             </div>

@@ -49,7 +49,7 @@ export const FormProvider = ({ children }: { children: React.ReactNode }) => {
     })
 
     const form5 = useForm<CausalTreeValues>({
-        defaultValues: { causaRaiz: "", notas: "" },
+        defaultValues: { hechos: [""], diagrama: null },
     })
 
     const form6 = useForm<ActionPlansValues>({
