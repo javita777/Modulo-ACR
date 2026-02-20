@@ -10,13 +10,14 @@ import { ProblemDefinition } from "./components/ProblemDefinition";
 import { PossibleCauses } from "./components/PossibleCauses";
 import { Whys } from "./components/Whys";
 import { CausalTree } from "./components/Causaltree";
-// import { ActionPlans } from "./components/ActionPlans";
+import { ActionPlans } from "./components/ActionsPlan";
+
 // import { StandardizationImprovements } from "./components/StandardizationImprovements";
 import { FormProvider } from "./components/FormProvider";
 
 
 export const App = () => {
-    const [currentStep, setCurrentStep] = useState(2);
+    const [currentStep, setCurrentStep] = useState(7);
 
     const handleNext = () => {
         if (currentStep < 7) {
@@ -42,10 +43,10 @@ export const App = () => {
                 return <Whys />;
             case 5:
                 return <CausalTree />;
-            //          case 6:
-            //              return <ActionPlans />;
-            //          case 7:
-            //              return <StandardizationImprovements />;
+            case 6:
+                return <ActionPlans />;
+            // case 7:
+            //     return <StandardizationImprovements />;
         }
     };
 

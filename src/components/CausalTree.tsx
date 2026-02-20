@@ -1,5 +1,6 @@
-import { useRef, useState } from "react"
-import { useStepForm, useFormActions, type CausalTreeValues } from "./FormContext"
+import { useRef } from "react"
+import { Controller, useFieldArray } from "react-hook-form"
+import { useStepForm, useFormActions } from "./FormContext"
 import { Input } from "@/components/ui/input"
 import { Button } from "@/components/ui/button"
 import { Trash2, Upload, X, FileText } from 'lucide-react';
@@ -9,14 +10,14 @@ import '../index.css'
 export const CausalTree = () => {
     const form = useStepForm(5)
     const { registerStepSubmit } = useFormActions()
-    const { register, setValue, watch } = form
-    const [hechos, setHechos] = useState([0])
+    const { control, setValue, watch } = form
+    const { fields, append, remove } = useFieldArray({ control, name: "hechos" })
     const fileInputRef = useRef<HTMLInputElement>(null)
 
     const diagrama = watch("diagrama")
 
-    const agregarHecho = () => setHechos(prev => [...prev, prev.length])
-    const eliminarHecho = () => setHechos(prev => prev.slice(0, -1))
+    const agregarHecho = () => append({ value: "" })
+    const eliminarHecho = (index: number) => remove(index)
 
     const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
         const file = e.target.files?.[0]
@@ -45,15 +46,18 @@ export const CausalTree = () => {
                 <span className="text-body-small font-medium">Hechos</span>
                 {/* lista */}
                 <div className="flex flex-col gap-3 px-1.5">
-                    {hechos.map((index) => (
-                        <div key={index} className="flex items-center gap-2.5">
+                    {fields.map((_field, index) => (
+                        <div key={_field.id} className="flex items-center gap-2.5">
                             <span className="flex items-center justify-center min-w-8 h-8 rounded-md bg-[var(--color-primary-100)] text-white text-body-small font-medium select-none">
                                 {index + 1}
                             </span>
-                            <Input type="text" placeholder="Value" className="flex-1"
-                                {...register(`hechos.${index}`)} />
+                            <Controller control={control} name={`hechos.${index}.value`}
+                                render={({ field }) => (
+                                    <Input type="text" placeholder="Value" className="flex-1"
+                                        value={field.value} onChange={field.onChange} />
+                                )} />
                             <button
-                                onClick={eliminarHecho}
+                                onClick={() => eliminarHecho(index)}
                                 className="text-gray-400 hover:text-red-500 transition-colors">
                                 <Trash2 className="w-4 h-4" />
                             </button>

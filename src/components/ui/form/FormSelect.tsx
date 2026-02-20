@@ -29,7 +29,7 @@ export const FormSelect = ({
     direction,
 }: FormSelectProps) => {
     return (
-        <div className={`flex ${direction} gap-2.5 px-1.5 items-center`}>
+        <div className={`flex flex-1 ${direction} gap-2.5 px-1.5 ${direction === 'flex-row' ? 'items-center' : ''}`}>
             <span className="text-body-small whitespace-nowrap">{title}</span>
             <Select value={value} onValueChange={onChange}>
                 <SelectTrigger className="w-full">

@@ -67,17 +67,16 @@ export type WhysValues = {
 export type DiagramFile = { src: string; name: string; type: string }
 
 export type CausalTreeValues = {
-    hechos: string[]
+    hechos: { value: string }[]
     diagrama: DiagramFile | null
 }
 
 export type ActionPlansValues = {
-    acciones: { descripcion: string; responsable: string; fechaLimite: Date | undefined }[]
+    acciones: { Que: string; Como: string; Quien: string; Cuando: Date | undefined; Estado: string }[]
 }
 
 export type StandardizationImprovementsValues = {
-    estandarizacion: string
-    mejoras: string
+    items: { Item: string; Codigo: string; Contenido: string; Responsable: string; Cuando: Date | undefined; Estado: string; Expansible: boolean }[]
 }
 
 // ─────────────────────────────────────────────────────────────────────────────
@@ -144,6 +143,14 @@ export const WHYS_PROGRESS_FIELDS: (keyof WhysValues)[] = [
 
 export const CT_PROGRESS_FIELDS: (keyof CausalTreeValues)[] = [
     "hechos", "diagrama",
+]
+
+export const AP_PROGRESS_FIELDS: (keyof ActionPlansValues)[] = [
+    "acciones"
+]
+
+export const SI_PROGRESS_FIELDS: (keyof StandardizationImprovementsValues)[] = [
+    "items"
 ]
 
 export { FormContext }

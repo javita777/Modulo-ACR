@@ -22,7 +22,7 @@ export const FormInput = ({
     direction,
 }: FormInputProps) => {
     return (
-        <div className={`flex ${direction} gap-2.5 px-1.5 items-center`}>
+        <div className={`flex flex-1 ${direction} gap-2.5 px-1.5 ${direction === 'flex-row' ? 'items-center' : ''} `}>
             <span className="text-body-small whitespace-nowrap">{title}</span>
             <Input
                 id={title}
@@ -30,7 +30,7 @@ export const FormInput = ({
                 placeholder={placeholder}
                 value={value}
                 onChange={onChange}
-                className="flex-1"
+                className={direction==='flex-row'? "flex-1" : ""}
             />
         </div>
     )

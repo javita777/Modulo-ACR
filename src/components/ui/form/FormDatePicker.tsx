@@ -10,11 +10,14 @@ interface FormDatePickerProps {
     value?: Date
     onChange?: (date: Date | undefined) => void
     error?: string
+    direction?: Direction
 }
 
-export const FormDatePicker = ({ title, value, onChange, error }: FormDatePickerProps) => {
+type Direction = "flex-row" | "flex-col"
+
+export const FormDatePicker = ({ title, value, onChange, error, direction, }: FormDatePickerProps) => {
     return (
-        <div className="flex gap-2.5 px-1.5 items-center">
+        <div className={`flex flex-1 ${direction} gap-2.5 px-1.5 ${direction === 'flex-row' ? 'items-center' : ''}`}>
             <span className="text-body-small whitespace-nowrap">{title}</span>
             <Popover>
                 <PopoverTrigger asChild>

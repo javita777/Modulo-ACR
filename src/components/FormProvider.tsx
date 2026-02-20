@@ -49,17 +49,17 @@ export const FormProvider = ({ children }: { children: React.ReactNode }) => {
     })
 
     const form5 = useForm<CausalTreeValues>({
-        defaultValues: { hechos: [""], diagrama: null },
+        defaultValues: { hechos: [{ value: "" }], diagrama: null },
     })
 
     const form6 = useForm<ActionPlansValues>({
         defaultValues: {
-            acciones: [{ descripcion: "", responsable: "", fechaLimite: undefined }],
+            acciones: [{ Que: "", Como: "", Quien: "", Cuando: undefined, Estado: "" }],
         },
     })
 
     const form7 = useForm<StandardizationImprovementsValues>({
-        defaultValues: { estandarizacion: "", mejoras: "" },
+        defaultValues: {  items: [{ Item: "", Codigo: "", Contenido: "", Responsable: "", Cuando: undefined, Estado: "", Expansible: false }], },
     })
 
     // Registro de callbacks de submit por step

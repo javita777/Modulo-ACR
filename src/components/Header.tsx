@@ -3,7 +3,7 @@ import { Progress } from "@/components/ui/progress"
 
 import logo from '../assets/Logo-transparente.png'
 import '../index.css'
-import { useFormActions, useStepForm, GA_PROGRESS_FIELDS, PD_PROGRESS_FIELDS, PC_PROGRESS_FIELDS, WHYS_PROGRESS_FIELDS, CT_PROGRESS_FIELDS } from './FormContext';
+import { useFormActions, useStepForm, GA_PROGRESS_FIELDS, PD_PROGRESS_FIELDS, PC_PROGRESS_FIELDS, WHYS_PROGRESS_FIELDS, CT_PROGRESS_FIELDS, AP_PROGRESS_FIELDS } from './FormContext';
 
 export const Header = () => {
     const { submitAllSteps } = useFormActions()
@@ -60,13 +60,31 @@ export const Header = () => {
     const diagramaVal = form5.watch("diagrama")
     const progressStep5 = Math.round(
         ([
-            hechosVal.some(h => h.trim() !== ''),
+            hechosVal.some(h => h.value.trim() !== ''),
             diagramaVal !== null,
         ].filter(Boolean).length / CT_PROGRESS_FIELDS.length) * 100
     )
 
+    // ── Step 6: Plan de acciones ───────────────────────────────────────────────
+    const form6 = useStepForm(6)
+    const [accionesVal] = form6.watch(AP_PROGRESS_FIELDS)
+    const progressStep6 = accionesVal.length === 0
+        ? 0
+        : Math.round(
+            accionesVal.reduce((acc, a) => {
+                const filled = [
+                    a.Que?.trim() !== '',
+                    a.Como?.trim() !== '',
+                    a.Quien?.trim() !== '',
+                    a.Cuando !== undefined,
+                    a.Estado !== '',
+                ].filter(Boolean).length
+                return acc + filled / 5
+            }, 0) / accionesVal.length * 100
+        )
+
     // ── Progreso total (promedio de todos los steps) ──────────────────────────
-    const progress = Math.round((progressStep1 + progressStep2 + progressStep3 + progressStep4 + progressStep5) / 5)
+    const progress = Math.round((progressStep1 + progressStep2 + progressStep3 + progressStep4 + progressStep5 + progressStep6) / 6)
 
     const [logoContainerHeight, setLogoContainerHeight] = useState<number | undefined>(undefined);
     const titleContainerRef = useRef<HTMLDivElement>(null);
