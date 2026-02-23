@@ -9,6 +9,7 @@ import {
     type CausalTreeValues,
     type ActionPlansValues,
     type StandardizationImprovementsValues,
+    type ApprovalValues,
 } from "./FormContext"
 
 // Constantes exportadas para defaultValues del step 1
@@ -62,6 +63,10 @@ export const FormProvider = ({ children }: { children: React.ReactNode }) => {
         defaultValues: {  items: [{ Item: "", Codigo: "", Contenido: "", Responsable: "", Cuando: undefined, Estado: "", Expansible: false }], },
     })
 
+    const form8 = useForm<ApprovalValues>({
+        defaultValues: { participantes: [{ fotoBD: null, fotoEscaneada: null, nombre: "", rol: "", participa: true }] },
+    })
+
     // Registro de callbacks de submit por step
     const stepSubmitMap = useRef<Map<number, () => void>>(new Map())
 
@@ -83,11 +88,12 @@ export const FormProvider = ({ children }: { children: React.ReactNode }) => {
         console.log("[Step 5] Form data:", form5.getValues())
         console.log("[Step 6] Form data:", form6.getValues())
         console.log("[Step 7] Form data:", form7.getValues())
+        console.log("[Step 8] Form data:", form8.getValues())
     }
 
     return (
         <FormContext.Provider value={{
-            forms: { 1: form1, 2: form2, 3: form3, 4: form4, 5: form5, 6: form6, 7: form7 },
+            forms: { 1: form1, 2: form2, 3: form3, 4: form4, 5: form5, 6: form6, 7: form7, 8: form8 },
             submitCurrentStep,
             submitAllSteps,
             registerStepSubmit,

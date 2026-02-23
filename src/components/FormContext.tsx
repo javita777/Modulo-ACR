@@ -79,6 +79,10 @@ export type StandardizationImprovementsValues = {
     items: { Item: string; Codigo: string; Contenido: string; Responsable: string; Cuando: Date | undefined; Estado: string; Expansible: boolean }[]
 }
 
+export type ApprovalValues = {
+    participantes: { fotoBD: string | null; fotoEscaneada: string | null; nombre: string; rol: string; participa: boolean }[]
+}
+
 // ─────────────────────────────────────────────────────────────────────────────
 // Contexto
 // ─────────────────────────────────────────────────────────────────────────────
@@ -91,6 +95,7 @@ export type StepForms = {
     5: UseFormReturn<CausalTreeValues>
     6: UseFormReturn<ActionPlansValues>
     7: UseFormReturn<StandardizationImprovementsValues>
+    8: UseFormReturn<ApprovalValues>
 }
 
 type FormContextValue = {
@@ -151,6 +156,10 @@ export const AP_PROGRESS_FIELDS: (keyof ActionPlansValues)[] = [
 
 export const SI_PROGRESS_FIELDS: (keyof StandardizationImprovementsValues)[] = [
     "items"
+]
+
+export const APPROVAL_PROGRESS_FIELDS: (keyof ApprovalValues)[] = [
+    "participantes"
 ]
 
 export { FormContext }

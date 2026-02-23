@@ -3,7 +3,7 @@ import { Progress } from "@/components/ui/progress"
 
 import logo from '../assets/Logo-transparente.png'
 import '../index.css'
-import { useFormActions, useStepForm, GA_PROGRESS_FIELDS, PD_PROGRESS_FIELDS, PC_PROGRESS_FIELDS, WHYS_PROGRESS_FIELDS, CT_PROGRESS_FIELDS, AP_PROGRESS_FIELDS } from './FormContext';
+import { useFormActions, useStepForm, GA_PROGRESS_FIELDS, PD_PROGRESS_FIELDS, PC_PROGRESS_FIELDS, WHYS_PROGRESS_FIELDS, CT_PROGRESS_FIELDS, AP_PROGRESS_FIELDS, SI_PROGRESS_FIELDS } from './FormContext';
 
 export const Header = () => {
     const { submitAllSteps } = useFormActions()
@@ -83,8 +83,27 @@ export const Header = () => {
             }, 0) / accionesVal.length * 100
         )
 
+    // ── Step 7: Estandarización de mejoras ────────────────────────────────────
+    const form7 = useStepForm(7)
+    const [itemsVal] = form7.watch(SI_PROGRESS_FIELDS)
+    const progressStep7 = itemsVal.length === 0
+        ? 0
+        : Math.round(
+            itemsVal.reduce((acc, it) => {
+                const filled = [
+                    it.Item !== '',
+                    it.Codigo?.trim() !== '',
+                    it.Contenido?.trim() !== '',
+                    it.Responsable?.trim() !== '',
+                    it.Cuando !== undefined,
+                    it.Estado !== '',
+                ].filter(Boolean).length
+                return acc + filled / 6
+            }, 0) / itemsVal.length * 100
+        )
+
     // ── Progreso total (promedio de todos los steps) ──────────────────────────
-    const progress = Math.round((progressStep1 + progressStep2 + progressStep3 + progressStep4 + progressStep5 + progressStep6) / 6)
+    const progress = Math.round((progressStep1 + progressStep2 + progressStep3 + progressStep4 + progressStep5 + progressStep6 + progressStep7) / 7)
 
     const [logoContainerHeight, setLogoContainerHeight] = useState<number | undefined>(undefined);
     const titleContainerRef = useRef<HTMLDivElement>(null);
@@ -133,7 +152,7 @@ export const Header = () => {
                         <span className="text-body-strong text-text-placeholder">Progreso</span>
                         <span className='text-body-strong text-text-placeholder'>{progress}%</span>
                     </div>
-                    <Progress value={progress} className="w-[60%]" />
+                    <Progress value={progress} className="w-full" />
                 </div>
             </div>
         </div>

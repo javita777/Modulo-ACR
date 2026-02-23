@@ -12,6 +12,7 @@ import { Whys } from "./components/Whys";
 import { CausalTree } from "./components/CausalTree";
 import { ActionPlans } from "./components/ActionsPlan";
 import { StandardizationImprovements } from "./components/StandardizationImprovements";
+import { Summary } from "./components/Summary";
 
 import { FormProvider } from "./components/FormProvider";
 
@@ -20,7 +21,7 @@ export const App = () => {
     const [currentStep, setCurrentStep] = useState(7);
 
     const handleNext = () => {
-        if (currentStep < 7) {
+        if (currentStep < 8) {
             setCurrentStep(prev => prev + 1);
         }
     };
@@ -31,7 +32,7 @@ export const App = () => {
         }
     };
 
-    const renderContent = () => {
+    const renderContentForm = () => {
         switch (currentStep) {
             case 1:
                 return <GeneralAntecedents />;
@@ -50,14 +51,32 @@ export const App = () => {
         }
     };
 
+    const renderContent = () => {
+        switch (currentStep) {
+            case 8:
+                return (
+                    <div className="flex flex-col gap-7.5">
+                        <Header />
+                        <Footer currentStep={currentStep} onNext={handleNext} onPrev={handlePrev} />
+                        <Summary />
+                    </div>
+
+                )
+            default:
+                return (
+                    <div className="flex flex-col gap-7.5" >
+                        <Header />
+                        <Stepper currentStep={currentStep} onStepClick={setCurrentStep} />
+                        {renderContentForm()}
+                        <Footer currentStep={currentStep} onNext={handleNext} onPrev={handlePrev} />
+                    </div>
+                )
+        }
+    }
+
     return (
         <FormProvider>
-            <div className="flex flex-col gap-7.5" >
-                <Header />
-                <Stepper currentStep={currentStep} onStepClick={setCurrentStep} />
-                {renderContent()}
-                <Footer currentStep={currentStep} onNext={handleNext} onPrev={handlePrev} />
-            </div>
+            {renderContent()}
         </FormProvider>
     )
 } 

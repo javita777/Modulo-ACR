@@ -122,11 +122,16 @@ export const ProblemDefinition = () => {
                         </div>
                     )}
                 </div>
-                <input
+                <textarea
                     id={title}
-                    type="text"
+                    rows={1}
                     placeholder="Value"
-                    className="flex h-9 w-full rounded-md border border-input bg-transparent px-3 py-1 text-sm shadow-sm transition-colors placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring"
+                    className="flex w-full rounded-md border border-input bg-transparent px-3 py-1 text-sm shadow-sm transition-colors placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring resize-none overflow-hidden"
+                    onInput={(e) => {
+                        const el = e.currentTarget
+                        el.style.height = 'auto'
+                        el.style.height = el.scrollHeight + 'px'
+                    }}
                     {...register(key, { required: "Campo requerido" })}
                 />
                 {error && <span className="text-xs text-red-500">{error.message}</span>}
