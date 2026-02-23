@@ -9,10 +9,10 @@ import { GeneralAntecedents } from "./components/GeneralAntecedents";
 import { ProblemDefinition } from "./components/ProblemDefinition";
 import { PossibleCauses } from "./components/PossibleCauses";
 import { Whys } from "./components/Whys";
-import { CausalTree } from "./components/Causaltree";
+import { CausalTree } from "./components/CausalTree";
 import { ActionPlans } from "./components/ActionsPlan";
+import { StandardizationImprovements } from "./components/StandardizationImprovements";
 
-// import { StandardizationImprovements } from "./components/StandardizationImprovements";
 import { FormProvider } from "./components/FormProvider";
 
 
@@ -45,8 +45,8 @@ export const App = () => {
                 return <CausalTree />;
             case 6:
                 return <ActionPlans />;
-            // case 7:
-            //     return <StandardizationImprovements />;
+            case 7:
+                return <StandardizationImprovements />;
         }
     };
 
