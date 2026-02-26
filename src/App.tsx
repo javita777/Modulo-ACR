@@ -18,7 +18,7 @@ import { FormProvider } from "./components/FormProvider";
 
 
 export const App = () => {
-    const [currentStep, setCurrentStep] = useState(7);
+    const [currentStep, setCurrentStep] = useState(1);
 
     const handleNext = () => {
         if (currentStep < 8) {

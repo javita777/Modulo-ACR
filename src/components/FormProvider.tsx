@@ -1,7 +1,8 @@
-import { useRef, useState } from "react"
+import { useRef } from "react"
 import { useForm } from "react-hook-form"
 import {
     FormContext,
+    type AllFormData,
     type GeneralAntecedentsValues,
     type ProblemDefinitionValues,
     type PossibleCausesValues,
@@ -12,13 +13,11 @@ import {
     type ApprovalValues,
 } from "./FormContext"
 
-// Constantes exportadas para defaultValues del step 1
-import { PRACTICAS, MODOS_DE_FALLA } from "./GeneralAntecedents"
 
-export const FormProvider = ({ children }: { children: React.ReactNode }) => {
+export const FormProvider = ({ children, initialValues }: { children: React.ReactNode; initialValues?: AllFormData | null }) => {
     // Un useForm por cada step
     const form1 = useForm<GeneralAntecedentsValues>({
-        defaultValues: {
+        defaultValues: initialValues?.step1 ?? {
             plantaTDR: "", area: "", linea: "", equipoCC: "", codigo: "",
             nroDesvio: "", nroST: "", nroOmOb: "", nroCasosSO: "",
             fecha: undefined,
@@ -30,7 +29,7 @@ export const FormProvider = ({ children }: { children: React.ReactNode }) => {
     })
 
     const form2 = useForm<ProblemDefinitionValues>({
-        defaultValues: {
+        defaultValues: initialValues?.step2 ?? {
             queProblema: "",
             dondeOcurrio: "",
             aQuienOcurrio: "",
@@ -42,29 +41,40 @@ export const FormProvider = ({ children }: { children: React.ReactNode }) => {
     })
 
     const form3 = useForm<PossibleCausesValues>({
-        defaultValues: { causas: [{ descripcion: '', clasificacion: '', verificado: false }] },
+        defaultValues: initialValues?.step3 ?? { causas: [{ descripcion: '', clasificacion: '', verificado: false }] },
     })
 
     const form4 = useForm<WhysValues>({
-        defaultValues: { sections: [] },
+        defaultValues: initialValues?.step4 ?? { sections: [] },
     })
 
     const form5 = useForm<CausalTreeValues>({
-        defaultValues: { hechos: [{ value: "" }], diagrama: null },
+        defaultValues: initialValues?.step5 ?? { hechos: [{ value: "" }], diagrama: null },
     })
 
     const form6 = useForm<ActionPlansValues>({
-        defaultValues: {
+        defaultValues: initialValues?.step6 ?? {
             acciones: [{ Que: "", Como: "", Quien: "", Cuando: undefined, Estado: "" }],
         },
     })
 
     const form7 = useForm<StandardizationImprovementsValues>({
-        defaultValues: {  items: [{ Item: "", Codigo: "", Contenido: "", Responsable: "", Cuando: undefined, Estado: "", Expansible: false }], },
+        defaultValues: initialValues?.step7 ?? { items: [{ Item: "", Codigo: "", Contenido: "", Responsable: "", Cuando: undefined, Estado: "", Expansible: false }] },
     })
 
     const form8 = useForm<ApprovalValues>({
-        defaultValues: { participantes: [{ fotoBD: null, fotoEscaneada: null, nombre: "", rol: "", participa: true }] },
+        defaultValues: initialValues?.step8 ?? { participantes: [{ fotoBD: null, fotoEscaneada: null, nombre: "", rol: "", participa: true }] },
+    })
+
+    const getAllValues = (): AllFormData => ({
+        step1: form1.getValues(),
+        step2: form2.getValues(),
+        step3: form3.getValues(),
+        step4: form4.getValues(),
+        step5: form5.getValues(),
+        step6: form6.getValues(),
+        step7: form7.getValues(),
+        step8: form8.getValues(),
     })
 
     // Registro de callbacks de submit por step
@@ -75,7 +85,7 @@ export const FormProvider = ({ children }: { children: React.ReactNode }) => {
     }
 
     const submitCurrentStep = () => {
-        // Llama solo el step registrado más recientemente (compatibilidad)
+        // Llama solo el step registrado más recientemente
         const fns = [...stepSubmitMap.current.values()]
         fns.at(-1)?.()
     }
@@ -97,6 +107,7 @@ export const FormProvider = ({ children }: { children: React.ReactNode }) => {
             submitCurrentStep,
             submitAllSteps,
             registerStepSubmit,
+            getAllValues,
         }}>
             {children}
         </FormContext.Provider>

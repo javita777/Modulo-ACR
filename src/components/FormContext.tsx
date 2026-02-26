@@ -1,5 +1,5 @@
 import { createContext, useContext } from "react"
-import { type UseFormReturn, useForm } from "react-hook-form"
+import { type UseFormReturn } from "react-hook-form"
 
 // ─────────────────────────────────────────────────────────────────────────────
 // Tipos de cada formulario
@@ -98,11 +98,23 @@ export type StepForms = {
     8: UseFormReturn<ApprovalValues>
 }
 
+export type AllFormData = {
+    step1: GeneralAntecedentsValues
+    step2: ProblemDefinitionValues
+    step3: PossibleCausesValues
+    step4: WhysValues
+    step5: CausalTreeValues
+    step6: ActionPlansValues
+    step7: StandardizationImprovementsValues
+    step8: ApprovalValues
+}
+
 type FormContextValue = {
     forms: StepForms
     submitCurrentStep: () => void
     submitAllSteps: () => void
     registerStepSubmit: (step: number, fn: () => void) => void
+    getAllValues: () => AllFormData
 }
 
 const FormContext = createContext<FormContextValue | null>(null)
@@ -120,6 +132,7 @@ export const useFormActions = () => {
         submitCurrentStep: ctx.submitCurrentStep,
         submitAllSteps: ctx.submitAllSteps,
         registerStepSubmit: ctx.registerStepSubmit,
+        getAllValues: ctx.getAllValues,
     }
 }
 

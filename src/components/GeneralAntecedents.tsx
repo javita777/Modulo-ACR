@@ -89,12 +89,12 @@ export const GeneralAntecedents = () => {
                         <Controller name="plantaTDR" control={control} rules={{ required: "Campo requerido" }}
                             render={({ field }) => (
                                 <FormSelect title="Planta/TDR"
-                                    options={[{ label: "Planta 1", value: "planta-1" }, { label: "Planta 2", value: "planta-2" }]}
-                                    value={field.value} onChange={field.onChange} error={errors.plantaTDR?.message} />
+                                    options={[{ label: "Planta 1", value: "planta-1" }, { label: "Planta 2", value: "planta-2" }, { label: "Planta 3", value: "planta-3" }]}
+                                    value={field.value} onChange={field.onChange} error={errors.plantaTDR?.message} direction="flex-row"/>
                             )} />
                         <Controller name="nroDesvio" control={control}
                             render={({ field }) => (
-                                <FormInput title="Nº Desvío" value={field.value} onChange={field.onChange} error={errors.nroDesvio?.message} />
+                                <FormInput title="Nº Desvío" value={field.value} onChange={field.onChange} error={errors.nroDesvio?.message} direction="flex-row"/>
                             )} />
                     </div>
 
@@ -103,12 +103,12 @@ export const GeneralAntecedents = () => {
                         <Controller name="area" control={control} rules={{ required: "Campo requerido" }}
                             render={({ field }) => (
                                 <FormSelect title="Área"
-                                    options={[{ label: "Área 1", value: "área-1" }, { label: "Área 2", value: "área-2" }]}
-                                    value={field.value} onChange={field.onChange} error={errors.area?.message} />
+                                    options={[{ label: "Área 1", value: "área-1" }, { label: "Área 2", value: "área-2" }, { label: "Sala de Higiene Industrial", value: "sala-higiene-industrial" }]}
+                                    value={field.value} onChange={field.onChange} error={errors.area?.message} direction="flex-row"/>
                             )} />
                         <Controller name="nroST" control={control}
                             render={({ field }) => (
-                                <FormInput title="Nº ST" value={field.value} onChange={field.onChange} error={errors.nroST?.message} />
+                                <FormInput title="Nº ST" value={field.value} onChange={field.onChange} error={errors.nroST?.message} direction="flex-row"/>
                             )} />
                     </div>
 
@@ -117,12 +117,12 @@ export const GeneralAntecedents = () => {
                         <Controller name="linea" control={control} rules={{ required: "Campo requerido" }}
                             render={({ field }) => (
                                 <FormSelect title="Línea"
-                                    options={[{ label: "Línea 1", value: "línea-1" }, { label: "Línea 2", value: "línea-2" }]}
-                                    value={field.value} onChange={field.onChange} error={errors.linea?.message} />
+                                    options={[{ label: "Línea 1", value: "línea-1" }, { label: "Línea 2", value: "línea-2" }, { label: "Bodega de Químicos", value: "bodega-de-quimicos" }]}
+                                    value={field.value} onChange={field.onChange} error={errors.linea?.message} direction="flex-row"/>
                             )} />
                         <Controller name="nroOmOb" control={control}
                             render={({ field }) => (
-                                <FormInput title="Nº.OM /OB" value={field.value} onChange={field.onChange} error={errors.nroOmOb?.message} />
+                                <FormInput title="Nº.OM /OB" value={field.value} onChange={field.onChange} error={errors.nroOmOb?.message} direction="flex-row"/>
                             )} />
                     </div>
 
@@ -130,11 +130,11 @@ export const GeneralAntecedents = () => {
                     <div className="flex flex-col gap-4 w-full">
                         <Controller name="equipoCC" control={control}
                             render={({ field }) => (
-                                <FormInput title="Equipo (CC)" value={field.value} onChange={field.onChange} error={errors.equipoCC?.message} />
+                                <FormInput title="Equipo (CC)" value={field.value} onChange={field.onChange} error={errors.equipoCC?.message} direction="flex-row"/>
                             )} />
                         <Controller name="nroCasosSO" control={control}
                             render={({ field }) => (
-                                <FormInput title="Nº. Casos (SO)" value={field.value} onChange={field.onChange} error={errors.nroCasosSO?.message} />
+                                <FormInput title="Nº. Casos (SO)" value={field.value} onChange={field.onChange} error={errors.nroCasosSO?.message} direction="flex-row"/>
                             )} />
                     </div>
 
@@ -142,11 +142,11 @@ export const GeneralAntecedents = () => {
                     <div className="flex flex-col gap-4 w-full">
                         <Controller name="codigo" control={control}
                             render={({ field }) => (
-                                <FormInput title="Código" value={field.value} onChange={field.onChange} error={errors.codigo?.message} />
+                                <FormInput title="Código" value={field.value} onChange={field.onChange} error={errors.codigo?.message} direction="flex-row"/>
                             )} />
                         <Controller name="fecha" control={control} rules={{ required: "Seleccione una fecha" }}
                             render={({ field }) => (
-                                <FormDatePicker title="Fecha" value={field.value} onChange={field.onChange} error={errors.fecha?.message} />
+                                <FormDatePicker title="Fecha" value={field.value} onChange={field.onChange} error={errors.fecha?.message} direction="flex-row"/>
                             )} />
                     </div>
                 </div>
@@ -155,7 +155,7 @@ export const GeneralAntecedents = () => {
                 <Controller name="practica" control={control} rules={{ required: "Seleccione al menos una práctica" }}
                     render={({ field }) => (
                         <FormCombobox title="Práctica" items={PRACTICAS}
-                            defaultValue={[PRACTICAS[0]]} onChange={field.onChange} error={errors.practica?.message} />
+                            defaultValue={[PRACTICAS[0]]} onChange={field.onChange} error={errors.practica?.message} direction="flex-row"/>
                     )} />
 
                 {/* Modo de falla — solo visible cuando práctica incluye 'MP' */}
@@ -163,7 +163,7 @@ export const GeneralAntecedents = () => {
                     <Controller name="modoDeFalla" control={control} rules={{ required: "Seleccione al menos un modo de falla" }}
                         render={({ field }) => (
                             <FormCombobox title="Modo de falla" items={MODOS_DE_FALLA}
-                                defaultValue={[MODOS_DE_FALLA[0]]} onChange={field.onChange} error={errors.modoDeFalla?.message} />
+                                defaultValue={[MODOS_DE_FALLA[0]]} onChange={field.onChange} error={errors.modoDeFalla?.message} direction="flex-row"/>
                         )} />
                 )}
             </div>

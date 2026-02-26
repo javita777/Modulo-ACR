@@ -1,5 +1,5 @@
 import { useState, useEffect, useRef } from 'react'
-import { ArrowRight, ChevronDown, Check, X } from 'lucide-react'
+import { ArrowRight, ChevronDown, Check, X, Plus } from 'lucide-react'
 import { useStepForm, useFormActions } from './FormContext'
 
 const CELL_W = 200   // px por columna
@@ -34,6 +34,7 @@ type Section = {
     id: string
     name: string
     nodes: GridNode[]
+    isManual?: boolean
 }
 
 
@@ -100,14 +101,20 @@ function CausaValidadaCard({ name, onAddDown }: { name: string; onAddDown: () =>
     )
 }
 
-function RootCauseCard({ text }: { text: string }) {
+function RootCauseCard({ text, onText }: { text: string; onText: (t: string) => void }) {
     return (
         <div className="flex flex-col bg-red-50 border border-red-300 rounded-xl w-44 p-3 gap-2">
             <span className="bg-red-500 text-white text-[10px] font-semibold px-2 py-0.5 rounded-full self-start flex items-center gap-1 whitespace-nowrap">
                 <Check className="w-2.5 h-2.5" />
                 Causa Raíz
             </span>
-            <p className="text-sm text-gray-800 leading-snug min-h-[3rem]">{text}</p>
+            <textarea
+                value={text}
+                onChange={e => onText(e.target.value)}
+                placeholder="Escriba aquí..."
+                rows={2}
+                className="flex-1 text-xs resize-none outline-none text-gray-700 placeholder:text-gray-300 bg-transparent leading-relaxed"
+            />
         </div>
     )
 }
@@ -277,8 +284,16 @@ export const Whys = () => {
     const { registerStepSubmit } = useFormActions()
 
     const [sections, setSections] = useState<Section[]>([])
+    const [collapsed, setCollapsed] = useState<Set<string>>(new Set())
     const sectionsRef = useRef<Section[]>([])
     sectionsRef.current = sections
+
+    const toggleCollapse = (sid: string) =>
+        setCollapsed(prev => {
+            const next = new Set(prev)
+            next.has(sid) ? next.delete(sid) : next.add(sid)
+            return next
+        })
 
     // ── Sync desde PossibleCauses ──────────────────────────────────────────────
 
@@ -289,9 +304,11 @@ export const Whys = () => {
                 id: s.id,
                 name: s.causaValidada,
                 nodes: s.nodes as GridNode[],
+                isManual: (s as any).isManual,
             }))
-            return verified.map(c => {
-                const existing = base.find(s => s.name === c.descripcion)
+            const manualSections = base.filter(s => s.isManual)
+            const fromCausas = verified.map(c => {
+                const existing = base.find(s => !s.isManual && s.name === c.descripcion)
                 if (existing) return existing
 
                 // Crear sección nueva con un solo why en (col=1, row=0)
@@ -320,8 +337,9 @@ export const Whys = () => {
                             parentId: cvId,
                         },
                     ],
-                }
+                } satisfies Section
             })
+            return [...fromCausas, ...manualSections]
         })
     }
 
@@ -337,7 +355,8 @@ export const Whys = () => {
             id: s.id,
             causaValidada: s.name,
             nodes: s.nodes,
-        })))
+            isManual: s.isManual,
+        } as any)))
     }, [sections])
 
     useEffect(() => {
@@ -406,6 +425,40 @@ export const Whys = () => {
             ],
         }))
     }
+
+    /** Agrega una nueva sección manual con su causa */
+    const addManualSection = () => {
+        const cvId = uid()
+        const why1Id = uid()
+        setSections(prev => [
+            ...prev,
+            {
+                id: uid(),
+                name: '',
+                isManual: true,
+                nodes: [
+                    { id: cvId, kind: 'cv', col: CV_COL, row: 0, text: '', isRootCause: false, parentId: null },
+                    { id: why1Id, kind: 'why', col: WHY_COL, row: 0, text: '', isRootCause: false, parentId: cvId },
+                ],
+            },
+        ])
+    }
+
+    /** Renombra una sección manual y actualiza también el nodo CV */
+    const renameSection = (sid: string, name: string) => {
+        setSections(prev => prev.map(s => {
+            if (s.id !== sid) return s
+            return {
+                ...s,
+                name,
+                nodes: s.nodes.map(n => n.kind === 'cv' ? { ...n, text: name } : n),
+            }
+        }))
+    }
+
+    /** Elimina una sección manual completa */
+    const removeSection = (sid: string) =>
+        setSections(prev => prev.filter(s => s.id !== sid))
 
     /** Agrega una cadena nueva desde la Causa Validada (CV) */
     const addFromCV = (sid: string) => {
@@ -522,15 +575,42 @@ export const Whys = () => {
                 const cv = nodes.find(n => n.kind === 'cv')!
                 const cvScreenRow = Math.floor(maxRow / 2) // centrar visualmente si hay múltiples rows
 
+                const isCollapsed = collapsed.has(section.id)
+
                 return (
                     <div key={section.id} className="bg-white rounded-xl shadow-sm border border-gray-200">
                         {/* Header */}
-                        <div className="px-4 py-2.5 bg-gray-50 border-b border-gray-200 rounded-t-xl">
-                            <span className="text-sm font-semibold text-gray-600">{section.name}</span>
+                        <div
+                            className={`px-4 py-2.5 bg-gray-50 border-gray-200 rounded-t-xl flex items-center justify-between gap-2 cursor-pointer select-none ${isCollapsed ? 'rounded-b-xl' : 'border-b'}`}
+                            onClick={() => toggleCollapse(section.id)}
+                        >
+                            <ChevronDown className={`w-4 h-4 text-gray-400 flex-shrink-0 transition-transform duration-200 ${isCollapsed ? '-rotate-90' : ''}`} />
+                            {section.isManual ? (
+                                <input
+                                    type="text"
+                                    value={section.name}
+                                    onChange={e => renameSection(section.id, e.target.value)}
+                                    onClick={e => e.stopPropagation()}
+                                    placeholder="Nombre de la causa..."
+                                    className="flex-1 text-sm font-semibold text-gray-600 bg-transparent outline-none border-b border-dashed border-gray-300 focus:border-red-400 placeholder:text-gray-300"
+                                />
+                            ) : (
+                                <span className="text-sm font-semibold text-gray-600 flex-1">{section.name}</span>
+                            )}
+                            {section.isManual && (
+                                <button
+                                    type="button"
+                                    onClick={e => { e.stopPropagation(); removeSection(section.id) }}
+                                    title="Eliminar causa"
+                                    className="text-gray-300 hover:text-red-400 transition-colors flex-shrink-0"
+                                >
+                                    <X className="w-4 h-4" />
+                                </button>
+                            )}
                         </div>
 
                         {/* Canvas scrollable */}
-                        <div className="overflow-auto p-4">
+                        {!isCollapsed && <div className="overflow-auto p-4">
                             <div
                                 style={{
                                     position: 'relative',
@@ -604,8 +684,6 @@ export const Whys = () => {
 
                                 {/* Root Cause Cards */}
                                 {nodes.filter(n => n.kind === 'root').map(node => {
-                                    // Sincronizar texto con el why que lo origina
-                                    const whyParent = nodes.find(n => n.id === node.parentId)
                                     return (
                                         <div
                                             key={node.id}
@@ -615,15 +693,28 @@ export const Whys = () => {
                                                 top: node.row * CELL_H,
                                             }}
                                         >
-                                            <RootCauseCard text={whyParent?.text ?? node.text} />
+                                            <RootCauseCard
+                                                text={node.text}
+                                                onText={t => updateNode(section.id, node.id, n => ({ ...n, text: t }))}
+                                            />
                                         </div>
                                     )
                                 })}
                             </div>
-                        </div>
+                        </div>}
                     </div>
                 )
             })}
+
+            {/* Botón agregar causa manual */}
+            <button
+                type="button"
+                onClick={addManualSection}
+                className="self-start flex items-center gap-2 px-4 py-2 rounded-lg border border-dashed border-gray-300 text-sm text-gray-400 hover:border-red-400 hover:text-red-500 transition-colors"
+            >
+                <Plus className="w-4 h-4" />
+                Agregar causa
+            </button>
         </div>
     )
 }
